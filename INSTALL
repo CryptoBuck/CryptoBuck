@@ -1,0 +1,9 @@
+Building CryptoBuck
+
+See doc/readme-qt.rst for instructions on building CryptoBuck QT,
+the intended-for-end-users, nice-graphical-interface, reference
+implementation of CryptoBuck.
+
+See doc/build-*.txt for instructions on building CryptoBuckd,
+the intended-for-services, no-graphical-interface, reference
+implementation of CryptoBuck.
