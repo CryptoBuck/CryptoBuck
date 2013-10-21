@@ -1348,12 +1348,8 @@ bool CWallet::CreateCoinStake(const CKeyStore& keystore, unsigned int nBits, int
 {
     // The following split & combine thresholds are important to security
     // Should not be adjusted if you don't understand the consequences
-    static unsigned int nStakeSplitAge = (60 * 60 * 24 * 30);
-	const CBlockIndex* pIndex0 = GetLastBlockIndex(pindexBest, false);
-    int64 nCombineThreshold = 0;
-	if(pIndex0->pprev)
-		nCombineThreshold = GetProofOfWorkReward(pIndex0->nHeight, MIN_TX_FEE, pIndex0->pprev->GetBlockHash()) / 3;
-
+    static unsigned int nStakeSplitAge = (60 * 60 * 24 * 60);
+    int64 nCombineThreshold = GetProofOfWorkReward(GetLastBlockIndex(pindexBest, false)->nBits) / 3;
     CBigNum bnTargetPerCoinDay;
     bnTargetPerCoinDay.SetCompact(nBits);
 
@@ -1500,8 +1496,13 @@ bool CWallet::CreateCoinStake(const CKeyStore& keystore, unsigned int nBits, int
         // Set output amount
         if (txNew.vout.size() == 3)
         {
-            txNew.vout[1].nValue = ((nCredit - nMinFee) / 2 / CENT) * CENT;
-            txNew.vout[2].nValue = nCredit - nMinFee - txNew.vout[1].nValue;
+           if( GetLastBlockIndex(pindexBest, false)->nHeight > 106750 ) // Fix rounded
+               txNew.vout[1].nValue = ((nCredit - nMinFee) / 2 );
+           else
+               txNew.vout[1].nValue = ((nCredit - nMinFee) / 2 / CENT ) * CENT;
+            
+        txNew.vout[2].nValue = nCredit - nMinFee - txNew.vout[1].nValue;
+			   
         }
         else
             txNew.vout[1].nValue = nCredit - nMinFee;
