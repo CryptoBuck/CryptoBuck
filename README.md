@@ -1,5 +1,5 @@
 
-CryptoBucks - Valued more than a coin!
+CryptoBuck - Valued more than a coin!
 
 Scrypt PoW/PoS
 
@@ -21,7 +21,7 @@ Block Rewards:
 
 140 Character TX Messaging
 
-3% Annual Stake, 30 days to stake, 60 days to full weight
+3% Proof of stake reward, 30 days to stake, 60 days to full weight
 
 Default RPC Port = 13888
 

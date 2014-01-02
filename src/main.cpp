@@ -2548,7 +2548,7 @@ bool LoadBlockIndex(bool fAllowNew)
         block.hashMerkleRoot = block.BuildMerkleTree();
         block.nVersion = 1;
         block.nTime    = 1376968574;
-        block.nBits    = bnProofOfWorkLimit.GetCompact();
+        block.nBits    = 0x1e0ffff0;
         block.nNonce   = 280433;
 
         //// debug print
@@ -2882,29 +2882,11 @@ bool static ProcessMessage(CNode* pfrom, string strCommand, CDataStream& vRecv)
         CAddress addrMe;
         CAddress addrFrom;
         uint64 nNonce = 1;
-		bool badVersion = false;
         vRecv >> pfrom->nVersion >> pfrom->nServices >> nTime >> addrMe;
         if (pfrom->nVersion < MIN_PROTO_VERSION)
         {
             // Since February 20, 2012, the protocol is initiated at version 209,
             // and earlier versions are no longer supported
-            printf("partner %s using obsolete version %i; disconnecting\n", pfrom->addr.ToString().c_str(), pfrom->nVersion);
-            pfrom->fDisconnect = true;
-            return false;
-        }
-		
-		     if(nTime < FIX_SWITCH_TIME)
-        {
-            if(pfrom->nVersion < 60006)
-                badVersion = true;
-        }
-        else
-        {
-            if(pfrom->nVersion < 70000)
-                badVersion = true;
-        }
-        if(badVersion)
-        {
             printf("partner %s using obsolete version %i; disconnecting\n", pfrom->addr.ToString().c_str(), pfrom->nVersion);
             pfrom->fDisconnect = true;
             return false;
