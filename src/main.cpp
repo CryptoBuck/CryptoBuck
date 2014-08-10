@@ -1010,7 +1010,6 @@ int64 GetProofOfStakeReward(int64 nCoinAge, unsigned int nBits, unsigned int nTi
 }
 
 
-static const int64 nTargetTimespan = 15 * 60;  // 15 mins
 
 
 static const int64 nTargetSpacingWorkMax = 12 * nStakeTargetSpacing; // 36 mins
@@ -1078,6 +1077,30 @@ unsigned int GetNextTargetRequired(const CBlockIndex* pindexLast, bool fProofOfS
         return bnTargetLimit.GetCompact(); // second block
 
     int64 nActualSpacing = pindexPrev->GetBlockTime() - pindexPrevPrev->GetBlockTime();
+
+
+    int64 nTargetTimespan;
+
+    if (pindexLast->nHeight >= 28000)
+    {
+        // fixed nTargetTimespan value: 30 blocks interval
+        nTargetTimespan =  nStakeTargetSpacing * 30;
+
+        // Time bomb prvention
+        if(nActualSpacing < 0)
+        {
+            nActualSpacing = 2;
+        }
+        else if(nActualSpacing > nTargetTimespan)
+        {
+            nActualSpacing = nTargetTimespan;
+        }
+    }
+    else
+    {
+        // original nTargetTimespan value
+        nTargetTimespan = 15 * 60;
+    }
 
     // ppcoin: target change every block
     // ppcoin: retarget with exponential moving toward target spacing
