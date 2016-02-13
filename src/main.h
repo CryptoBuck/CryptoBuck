@@ -41,6 +41,7 @@ static const int64 MAX_MINT_PROOF_OF_STAKE = 3 * CENT;
 static const int64 MIN_TXOUT_AMOUNT = MIN_TX_FEE;
 
 static const unsigned int FIX_SWITCH_TIME = 1382529600; // 10/23/2013 12:00 GMT
+static const unsigned int SUBSIDY_FIX_BLOCK = 199300;
 
 inline bool MoneyRange(int64 nValue) { return (nValue >= 0 && nValue <= MAX_MONEY); }
 // Threshold for nLockTime: below this value it is interpreted as block number, otherwise as UNIX timestamp.
