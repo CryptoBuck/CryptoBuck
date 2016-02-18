@@ -1609,6 +1609,14 @@ bool CBlock::ConnectBlock(CTxDB& txdb, CBlockIndex* pindex, bool fJustCheck)
 
         mapQueuedChanges[hashTx] = CTxIndex(posThisTx, tx.vout.size());
     }
+    if(pindex->nHeight >= SUBSIDY_FIX_BLOCK)
+    {
+    	// Check coinbase reward 
+    	if (vtx[0].GetValueOut() > (IsProofOfWork()? (GetProofOfWorkReward(pindex->nHeight) + nFees) : 0))
+            return DoS(50, error("CheckBlock() : coinbase reward exceeded %s > %s",
+     		FormatMoney(vtx[0].GetValueOut()).c_str(),
+           	FormatMoney(IsProofOfWork()? GetProofOfWorkReward(pindex->nHeight) : 0).c_str()));
+    }
 
     // ppcoin: track money supply and mint amount info
     pindex->nMint = nValueOut - nValueIn + nFees;
